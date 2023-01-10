@@ -1,0 +1,8 @@
+@use "src/styles/variables" as *;
+@use "src/styles/mixins/index" as *;
+
+.header {
+  @include flex-layout(center, space-between);
+  padding: $spacing $spacing * 2;
+  height: 40px;
+}
