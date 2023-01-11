@@ -5,8 +5,8 @@
   width: 100%;
   padding: $spacing 0;
   color: $main-gray-text-color;
-  @include flex-layout(center, space-between);
+  @include flex-layout(flex-start, flex-start);
   @include between-children {
-    margin-right: $spacing * 2;
+    margin-right: $spacing * 3;
   }
 }

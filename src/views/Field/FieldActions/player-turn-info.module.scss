@@ -1,0 +1,16 @@
+@use "src/styles/variables" as *;
+@use "src/styles/mixins/index" as *;
+
+.player-turn-info {
+  @include flex-layout();
+}
+
+.description {
+  @include between-children {
+    margin-right: $spacing;
+  }
+}
+
+.role {
+  font-weight: 700;
+}
