@@ -27,9 +27,9 @@ const FieldComponent: FC = (): ReactElement => {
   }, [fieldSize]);
 
   const renderFieldSizeValues = (): Array<ReactElement> => {
-    const sizes = [3, 4, 5, 6, 7, 8, 9, 10];
+    const sizes = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
 
-    return sizes.map((item) => <option value={item} key={item.toString()}>{item}</option>);
+    return sizes.map((item) => <option value={item} key={item.toString()}>{item} x {item}</option>);
   };
 
   return (
