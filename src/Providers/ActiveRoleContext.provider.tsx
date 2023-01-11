@@ -1,8 +1,8 @@
 import React, { createContext, FC, ReactElement, useState } from 'react';
 
 export enum ActiveRole {
-  CROSS_ROLE,
-  NULL_ROLE,
+  CROSS_ROLE = 'X',
+  NULL_ROLE = '0',
 }
 
 interface ActiveRoleContextState {

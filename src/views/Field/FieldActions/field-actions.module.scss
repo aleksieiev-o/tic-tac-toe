@@ -1,0 +1,12 @@
+@use "src/styles/variables" as *;
+@use "src/styles/mixins/index" as *;
+
+.fieldActions {
+  width: 100%;
+  padding: $spacing 0;
+  color: $main-gray-text-color;
+  @include flex-layout(center, space-between);
+  @include between-children {
+    margin-right: $spacing * 2;
+  }
+}

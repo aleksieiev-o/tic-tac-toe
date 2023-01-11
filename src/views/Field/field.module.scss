@@ -20,28 +20,6 @@
   }
 }
 
-.fieldActions {
-  width: 100%;
-  padding: $spacing 0;
-  color: $main-gray-text-color;
-  @include flex-layout(center, space-between);
-  @include between-children {
-    margin-right: $spacing * 2;
-  }
-}
-
-.fieldOptions {
-  flex-flow: column nowrap;
-  @include flex-layout(flex-start);
-  @include between-children {
-    margin-bottom: $spacing;
-  }
-}
-
-.fieldSize {
-
-}
-
 .field {
   width: 100%;
   height: 100%;
