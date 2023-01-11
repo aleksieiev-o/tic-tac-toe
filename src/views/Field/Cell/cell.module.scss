@@ -1,3 +1,9 @@
-.cell {
+@use "src/styles/variables" as *;
+@use "src/styles/mixins/index" as *;
 
+.cell {
+  border-right: 1px solid $main-gray-icon-color;
+  border-bottom: 1px solid $main-gray-icon-color;
+  color: $main-gray-text-color;
+  @include flex-layout();
 }

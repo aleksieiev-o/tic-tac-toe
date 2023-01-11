@@ -3,13 +3,15 @@ import styles from './header.module.scss';
 
 const HeaderComponent: FC = (): ReactElement => {
   return (
-    <div className={styles.header}>
-      <div className={'logo'}>
-        Tick-tack-toe
-      </div>
+    <div className={styles.wrapper}>
+      <div className={styles.container}>
+        <div className={styles.logo}>
+          Tic Tac Toe
+        </div>
 
-      <div className={'profile'}>
+        <div className={styles.profile}>
 
+        </div>
       </div>
     </div>
   );
