@@ -1,14 +1,15 @@
 import React, { FC, ReactElement, useMemo } from 'react';
 import styles from './cell.module.scss';
+import { CellPosition } from '../Field.component';
 
 interface Props {
   setCellValue: () => void;
-  position: string;
+  cellPosition: CellPosition;
   rowsAndColumnsCount: number;
   cellValue: string;
 }
 
-const CellComponent: FC<Props> = ({ setCellValue, rowsAndColumnsCount, cellValue}): ReactElement => {
+const CellComponent: FC<Props> = ({ setCellValue, rowsAndColumnsCount, cellValue, cellPosition}): ReactElement => {
   const cellSize = useMemo(() => {
     return {
       width: `calc(100% / ${rowsAndColumnsCount})`,
@@ -18,7 +19,7 @@ const CellComponent: FC<Props> = ({ setCellValue, rowsAndColumnsCount, cellValue
 
   return (
     <div className={styles.cell} style={cellSize} onClick={setCellValue}>
-      {cellValue}
+      {cellValue} {cellPosition.x}-{cellPosition.y}
     </div>
   );
 };
