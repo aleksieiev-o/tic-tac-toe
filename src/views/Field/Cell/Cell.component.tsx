@@ -9,7 +9,7 @@ interface Props {
   cellValue: string;
 }
 
-const CellComponent: FC<Props> = ({ setCellValue, rowsAndColumnsCount, cellValue, cellPosition}): ReactElement => {
+const CellComponent: FC<Props> = ({ setCellValue, rowsAndColumnsCount, cellValue}): ReactElement => {
   const cellSize = useMemo(() => {
     return {
       width: `calc(100% / ${rowsAndColumnsCount})`,
@@ -18,9 +18,9 @@ const CellComponent: FC<Props> = ({ setCellValue, rowsAndColumnsCount, cellValue
   }, [rowsAndColumnsCount]);
 
   return (
-    <div className={styles.cell} style={cellSize} onClick={setCellValue}>
-      {cellValue} {cellPosition.x}-{cellPosition.y}
-    </div>
+    <button className={styles.cell} style={cellSize} onClick={setCellValue}>
+      {cellValue}
+    </button>
   );
 };
 

@@ -2,9 +2,11 @@
 @use "src/styles/mixins/index" as *;
 
 .cell {
-  border-right: 1px solid $main-gray-icon-color;
-  border-bottom: 1px solid $main-gray-icon-color;
+  border: 1px solid $main-gray-icon-color;
+  background-color: transparent;
   color: $main-gray-text-color;
   cursor: pointer;
+  outline-color: $main-color;
+  outline-style: revert;
   @include flex-layout();
 }
