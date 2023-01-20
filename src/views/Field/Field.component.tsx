@@ -35,10 +35,11 @@ interface FieldAction {
   payload: Cell;
 }
 
+// TODO Delete unused param. fieldSize
 const createField = (rowsAndColumns: number, fieldSize: number): Field => {
   const field: Field = [];
 
-  for (let cell = 0; cell < fieldSize; cell++) {
+  for (let cell = 0; cell < rowsAndColumns; cell++) {
     const row: FieldRow = [];
 
     for (let rowItem = 0; rowItem < rowsAndColumns; rowItem++) {
@@ -59,13 +60,10 @@ const getCell = (field: Field, cellPosition: CellPosition): Cell => {
 
 const changeFieldReducer = (state: Field, action: FieldAction) => {
   const {cellPosition, value, fieldSize, rowsAndColumns} = action.payload;
-  const cell = getCell(state, cellPosition);
 
   switch (action.type) {
     case FieldActions.SET_CELL_VALUE: {
-      if (cell.value === CellValue.EMPTY_VALUE) {
-        getCell(state, cellPosition).value = value;
-      }
+      getCell(state, cellPosition).value = value;
       return state;
     }
     case FieldActions.CREATE_FIELD: {
@@ -77,39 +75,56 @@ const changeFieldReducer = (state: Field, action: FieldAction) => {
 
 const FieldComponent: FC = (): ReactElement => {
   const { activeRole, toggleActiveRole } = useContext(ActiveRoleContext);
+  const [started, setStarted] = useState<boolean>(false);
   const [rowsAndColumns, setRowsAndColumns] = useState<number>(3);
   const fieldSize = useMemo((): number => (rowsAndColumns * rowsAndColumns), [rowsAndColumns]);
 
   const [state, dispatch] = useReducer(changeFieldReducer, createField(rowsAndColumns, fieldSize));
 
   useEffect(() => {
-    // TODO Fix rerender during first render
-    dispatch({ type: FieldActions.CREATE_FIELD, payload: { cellPosition: {x: 0, y: 0}, value: CellValue.EMPTY_VALUE, fieldSize, rowsAndColumns }});
+    if (started) {
+      dispatch({ type: FieldActions.CREATE_FIELD, payload: { cellPosition: {x: 0, y: 0}, value: CellValue.EMPTY_VALUE, fieldSize, rowsAndColumns }});
+    }
   }, [fieldSize]);
 
-  const checkRowWin = (cell: Cell): boolean => {
-    // eslint-disable-next-line no-console
-    console.log(111, cell);
-    return false;
-  };
+  const checkRowWin = (cell: Cell): boolean => state[cell.cellPosition.x].every((item: Cell) => item.value === activeRole as string);
 
   const checkColumnWin = (cell: Cell): boolean => {
-    return false;
+    return state
+      .flat()
+      .filter((item: Cell) => item.cellPosition.y === cell.cellPosition.y)
+      .every((item: Cell) => item.value === activeRole as string);
   };
 
-  const checkDiagonalLeftWin = (cell: Cell): boolean => {
-    return false;
+  const checkLeftRightDiagonalWin = (): boolean => {
+    const cellList: FieldRow = [];
+
+    for (let rowIdx = 0; rowIdx < state.length; rowIdx++) {
+      cellList.push(state[rowIdx][rowIdx]);
+    }
+
+    return cellList.every((item: Cell) => item.value === activeRole as string);
   };
 
-  const checkDiagonalRightWin = (cell: Cell): boolean => {
-    return false;
+  const checkRightLeftDiagonalWin = (): boolean => {
+    const cellList: FieldRow = [];
+    let rowIdx = 0;
+
+    for (let cellIdx = rowsAndColumns - 1; cellIdx >= 0; cellIdx--) {
+      cellList.push(state[rowIdx][cellIdx]);
+      rowIdx++;
+    }
+
+    return cellList.every((item: Cell) => item.value === activeRole as string);
   };
 
-  const checkWin = (cell: Cell): boolean => {
+  const checkWin = (cellPosition: CellPosition): boolean => {
+    const cell: Cell = getCell(state, cellPosition);
+
     if (checkRowWin(cell)) return true;
     else if (checkColumnWin(cell)) return true;
-    else if (checkDiagonalLeftWin(cell)) return true;
-    else if (checkDiagonalRightWin(cell)) return true;
+    else if (checkLeftRightDiagonalWin()) return true;
+    else if (checkRightLeftDiagonalWin()) return true;
     return false;
   };
 
@@ -117,13 +132,15 @@ const FieldComponent: FC = (): ReactElement => {
     const cell: Cell = getCell(state, cellPosition);
 
     if (cell.value === CellValue.EMPTY_VALUE) {
+      setStarted(true);
       // TODO Fix rerender all cell items after update cellValue
       const value = activeRole === ActiveRole.CROSS_ROLE ? CellValue.CROSS_VALUE : CellValue.NULL_VALUE;
       dispatch({ type: FieldActions.SET_CELL_VALUE, payload: { cellPosition, value, fieldSize, rowsAndColumns }});
 
-      if (!checkWin(getCell(state, cellPosition))) {
+      setTimeout(() => {
+        checkWin(cellPosition);
         toggleActiveRole();
-      }
+      }, 0);
     }
   };
 
@@ -142,10 +159,15 @@ const FieldComponent: FC = (): ReactElement => {
     });
   };
 
+  const changeFieldSize = (rowsAndColumns: number): void => {
+    setStarted(true);
+    setRowsAndColumns(rowsAndColumns);
+  };
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.container}>
-        <FieldActionsComponent rowsAndColumns={rowsAndColumns} setRowsAndColumns={(rowsAndColumns: number) => setRowsAndColumns(rowsAndColumns)}/>
+        <FieldActionsComponent rowsAndColumns={rowsAndColumns} setRowsAndColumns={changeFieldSize}/>
 
         <div className={styles.field}>
           {
