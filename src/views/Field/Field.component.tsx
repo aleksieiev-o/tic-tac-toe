@@ -27,7 +27,6 @@ export interface CellPosition {
 
 interface Cell {
   cellPosition: CellPosition;
-  fieldSize: number;
   rowsAndColumns: number;
   value: CellValue;
 }
@@ -40,8 +39,7 @@ interface FieldAction {
   payload: Cell;
 }
 
-// TODO Delete unused param. fieldSize
-const createField = (rowsAndColumns: number, fieldSize: number): Field => {
+const createField = (rowsAndColumns: number): Field => {
   const field: Field = [];
 
   for (let cell = 0; cell < rowsAndColumns; cell++) {
@@ -50,7 +48,7 @@ const createField = (rowsAndColumns: number, fieldSize: number): Field => {
     for (let rowItem = 0; rowItem < rowsAndColumns; rowItem++) {
       const cellPosition: CellPosition = { x: cell, y: rowItem };
 
-      row.push({ cellPosition, value: CellValue.EMPTY_VALUE, fieldSize, rowsAndColumns });
+      row.push({ cellPosition, value: CellValue.EMPTY_VALUE, rowsAndColumns });
     }
 
     field.push(row);
@@ -64,7 +62,7 @@ const getCell = (field: Field, cellPosition: CellPosition): Cell => {
 };
 
 const changeFieldReducer = (state: Field, action: FieldAction) => {
-  const {cellPosition, value, fieldSize, rowsAndColumns} = action.payload;
+  const {cellPosition, value, rowsAndColumns} = action.payload;
 
   switch (action.type) {
     case FieldActions.SET_CELL_VALUE: {
@@ -72,7 +70,7 @@ const changeFieldReducer = (state: Field, action: FieldAction) => {
       return state;
     }
     case FieldActions.CREATE_FIELD: {
-      return createField(rowsAndColumns, fieldSize);
+      return createField(rowsAndColumns);
     }
     default: return state;
   }
@@ -87,11 +85,11 @@ const FieldComponent: FC = (): ReactElement => {
 
   const fieldSize = useMemo((): number => (rowsAndColumns * rowsAndColumns), [rowsAndColumns]);
 
-  const [state, dispatch] = useReducer(changeFieldReducer, createField(rowsAndColumns, fieldSize));
+  const [state, dispatch] = useReducer(changeFieldReducer, createField(rowsAndColumns));
 
   useEffect(() => {
     if (started) {
-      dispatch({ type: FieldActions.CREATE_FIELD, payload: { cellPosition: {x: 0, y: 0}, value: CellValue.EMPTY_VALUE, fieldSize, rowsAndColumns }});
+      dispatch({ type: FieldActions.CREATE_FIELD, payload: { cellPosition: {x: 0, y: 0}, value: CellValue.EMPTY_VALUE, rowsAndColumns }});
     }
   }, [fieldSize, gameMode]);
 
@@ -143,7 +141,7 @@ const FieldComponent: FC = (): ReactElement => {
       setStarted(true);
       // TODO Fix rerender all cell items after update cellValue
       const value = activeRole === ActiveRole.CROSS_ROLE ? CellValue.CROSS_VALUE : CellValue.NULL_VALUE;
-      dispatch({ type: FieldActions.SET_CELL_VALUE, payload: { cellPosition, value, fieldSize, rowsAndColumns }});
+      dispatch({ type: FieldActions.SET_CELL_VALUE, payload: { cellPosition, value, rowsAndColumns }});
 
       setTimeout(() => {
         checkWin(cellPosition);
