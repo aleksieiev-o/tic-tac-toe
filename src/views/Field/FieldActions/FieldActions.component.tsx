@@ -1,9 +1,8 @@
 import React, { ChangeEvent, FC, ReactElement, useContext } from 'react';
 import styles from './field-actions.module.scss';
 import FieldActionsSelectorComponent from './FieldActionsSelector.component';
-import PlayerTurnInfoComponent from './PlayerTurnInfo.component';
 import { ActiveRoleContext } from '../../../Providers/ActiveRoleContext.provider';
-import { MAX_FIELD_SIZE, MIN_FIELD_SIZE, PVC_MODE, PVP_MODE } from '../Field.component';
+import { MAX_FIELD_SIZE, MIN_FIELD_SIZE, PVP_MODE } from '../Field.component';
 
 interface Props {
   rowsAndColumns: number;
@@ -37,7 +36,7 @@ const FieldActionsComponent: FC<Props> = ({ rowsAndColumns, gameMode, setRowsAnd
   const renderGameModeValues = (): Array<ReactElement> => {
     const modes = [
       { value: PVP_MODE, title: 'Player vs player' },
-      { value: PVC_MODE, title: 'Player vs computer' },
+      // { value: PVC_MODE, title: 'Player vs computer' }, // TODO add logic for PVC game mode
     ];
 
     return modes.map((item) => <option value={item.value} key={item.value}>{item.title}</option>);
@@ -58,8 +57,6 @@ const FieldActionsComponent: FC<Props> = ({ rowsAndColumns, gameMode, setRowsAnd
       selectValue={gameMode}
       selectOptions={renderGameModeValues()}
       changeHandler={(e: ChangeEvent<HTMLSelectElement>) => changeGameMode(e)}/>
-
-      <PlayerTurnInfoComponent/>
     </div>
   );
 };

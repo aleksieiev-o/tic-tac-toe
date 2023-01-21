@@ -3,6 +3,7 @@ import styles from './field.module.scss';
 import CellComponent from './Cell/Cell.component';
 import FieldActionsComponent from './FieldActions/FieldActions.component';
 import { ActiveRole, ActiveRoleContext } from '../../Providers/ActiveRoleContext.provider';
+import GameInfoComponent from './GameInfo/GameInfo.component';
 
 export const MIN_FIELD_SIZE = 3;
 export const MAX_FIELD_SIZE = 20;
@@ -173,6 +174,8 @@ const FieldComponent: FC = (): ReactElement => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.container}>
+        <GameInfoComponent/>
+
         <FieldActionsComponent
         gameMode={gameMode}
         rowsAndColumns={rowsAndColumns}

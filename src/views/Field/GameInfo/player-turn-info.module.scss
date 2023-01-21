@@ -1,7 +1,7 @@
 @use "src/styles/variables" as *;
 @use "src/styles/mixins/index" as *;
 
-.player-turn-info {
+.playerTurnInfo {
   @include flex-layout();
 }
 

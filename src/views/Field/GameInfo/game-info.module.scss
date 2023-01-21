@@ -1,0 +1,11 @@
+@use "src/styles/variables" as *;
+@use "src/styles/mixins/index" as *;
+
+.gameInfo {
+  padding: $spacing 0;
+  width: 100%;
+  @include flex-layout(center, flex-start);
+  @include between-children {
+    margin-right: $spacing * 3;
+  }
+}

@@ -7,9 +7,7 @@ const PlayerTurnInfoComponent: FC = (): ReactElement => {
 
   return (
     <div className={styles.playerTurnInfo}>
-      <span className={styles.description}>Player turn: </span>
-
-      <b className={styles.role}>{activeRole}</b>
+      <span className={styles.description}>Player turn: <b className={styles.role}>{activeRole}</b></span>
     </div>
   );
 };
