@@ -1,7 +1,7 @@
 @use "src/styles/variables" as *;
 @use "src/styles/mixins/index" as *;
 
-.fieldOptions {
+.fieldActionsWrapper {
   flex-flow: column nowrap;
   @include flex-layout(flex-start);
   @include between-children {
@@ -9,6 +9,6 @@
   }
 }
 
-.fieldSize {
+.fieldActionsSelector {
 
 }
