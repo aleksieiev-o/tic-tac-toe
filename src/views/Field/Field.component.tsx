@@ -4,6 +4,11 @@ import CellComponent from './Cell/Cell.component';
 import FieldActionsComponent from './FieldActions/FieldActions.component';
 import { ActiveRole, ActiveRoleContext } from '../../Providers/ActiveRoleContext.provider';
 
+export const MIN_FIELD_SIZE = 3;
+export const MAX_FIELD_SIZE = 20;
+export const PVP_MODE = 'PVP';
+export const PVC_MODE = 'PVC';
+
 export enum CellValue {
   EMPTY_VALUE = '',
   CROSS_VALUE = 'X',
@@ -75,8 +80,11 @@ const changeFieldReducer = (state: Field, action: FieldAction) => {
 
 const FieldComponent: FC = (): ReactElement => {
   const { activeRole, toggleActiveRole } = useContext(ActiveRoleContext);
+
   const [started, setStarted] = useState<boolean>(false);
-  const [rowsAndColumns, setRowsAndColumns] = useState<number>(3);
+  const [rowsAndColumns, setRowsAndColumns] = useState<number>(MIN_FIELD_SIZE);
+  const [gameMode, setGameMode] = useState<string>(PVP_MODE);
+
   const fieldSize = useMemo((): number => (rowsAndColumns * rowsAndColumns), [rowsAndColumns]);
 
   const [state, dispatch] = useReducer(changeFieldReducer, createField(rowsAndColumns, fieldSize));
@@ -85,7 +93,7 @@ const FieldComponent: FC = (): ReactElement => {
     if (started) {
       dispatch({ type: FieldActions.CREATE_FIELD, payload: { cellPosition: {x: 0, y: 0}, value: CellValue.EMPTY_VALUE, fieldSize, rowsAndColumns }});
     }
-  }, [fieldSize]);
+  }, [fieldSize, gameMode]);
 
   const checkRowWin = (cell: Cell): boolean => state[cell.cellPosition.x].every((item: Cell) => item.value === activeRole as string);
 
@@ -167,7 +175,11 @@ const FieldComponent: FC = (): ReactElement => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.container}>
-        <FieldActionsComponent rowsAndColumns={rowsAndColumns} setRowsAndColumns={changeFieldSize}/>
+        <FieldActionsComponent
+        gameMode={gameMode}
+        rowsAndColumns={rowsAndColumns}
+        setRowsAndColumns={changeFieldSize}
+        setGameMode={setGameMode}/>
 
         <div className={styles.field}>
           {
